@@ -1,0 +1,93 @@
+.\"-
+.\" Manual page written by Timothy Brown <Timothy.Brown-1@colorado.edu>
+.\"
+.\" Copyright (C) 2014 Free Software Foundation, Inc.
+.\"
+.\" Permission is granted to make and distribute verbatim copies of
+.\" this manual provided the copyright notice and this permission notice
+.\" are preserved on all copies.
+.\"
+.\" Permission is granted to copy and distribute modified versions of this
+.\" manual under the conditions for verbatim copying, provided that the
+.\" entire resulting derived work is distributed under the terms of a
+.\" permission notice identical to this one.
+.\"
+.\" Permission is granted to copy and distribute translations of this
+.\" manual into another language, under the above conditions for modified
+.\" versions, except that this permission notice may be included in
+.\" translations approved by the Free Software Foundation instead of in
+.\" the original English.
+.\"
+.\"
+.Dd September 3, 2014
+.Dt lb 1 LOCAL
+.Sh NAME
+.Nm lb
+.Nd load balancer
+.Sh SYNOPSIS
+.Nm
+.Op Fl h
+.Op Fl v
+.Ao Ar cmd_file Ac
+.Sh DESCRIPTION
+The
+.Nm
+utility load balances serial jobs by using
+.Ic MPI
+to execute each job.
+The 
+.Nm
+utility allows you to specify your jobs in a text file that is then read
+and executed across the resource you request. This works on multiple
+nodes. You can generate the text file using any scripting language
+you like.
+.Pp
+The following options are available:
+.Bl -tag -width flag
+.It Fl h
+Display a short help message and exit.
+.It Fl v
+Display the version number and exit.
+.El
+.Pp
+The command file should contain a single serial command per line.
+.Pp
+.Sh EXAMPLES
+The following example uses the
+.Nm sh
+echo command as a serial job. You can exchage this line with your own
+executables.  Simple Example The following bash loop with create a file
+called cmd_lines that calls the echo command 100 times.
+.Pp
+.Bd -literal -offset indent
+for i in {1..100}; do echo "echo simulator $i" >> cmd_lines; done
+.Ed
+.Pp
+The file should look like the following.
+.Bd -literal -offset indent
+echo 'simulator' 1
+echo 'simulator' 2
+echo 'simulator' 3
+...
+echo 'simulator' 100
+.Pp
+.Ed
+Then to run all the commands using 20 cores you would launch it as
+.Bd -literal -offset indent
+mpiexec -np 20 lb cmd_lines
+.Sh EXIT STATUS
+.Ex -std
+.Sh SEE ALSO
+.Xr sh 1 ,
+.Xr system 3 ,
+.Xr MPI 3
+.Sh STANDARDS
+The
+.Nm
+command is expected to be
+.St -p1003.2
+compatible.
+.Sh AUTHOR
+Written by Timothy Brown.
+.Sh REPORTING BUGS
+Report bugs to <Timothy.Brown-1@colorado.edu.>
